@@ -1,0 +1,229 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --nvidia-green: rgba(118, 185, 0, 1);
+  --nvidia-green-dim: rgba(118, 185, 0, 0.3);
+  --conflict-red: rgba(255, 50, 50, 1);
+  --cyber-blue: rgba(0, 200, 255, 1);
+  --cyber-purple: rgba(180, 100, 255, 1);
+  --bg-dark: #0f0f12;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-dark);
+  color: #e0e0e0;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a20;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(118, 185, 0, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(118, 185, 0, 0.8);
+}
+
+/* Glow text effect */
+.text-glow-green {
+  text-shadow: 0 0 10px rgba(118, 185, 0, 0.6), 0 0 20px rgba(118, 185, 0, 0.4);
+}
+
+.text-glow-blue {
+  text-shadow: 0 0 10px rgba(0, 200, 255, 0.6), 0 0 20px rgba(0, 200, 255, 0.4);
+}
+
+.text-glow-red {
+  text-shadow: 0 0 10px rgba(255, 50, 50, 0.6), 0 0 20px rgba(255, 50, 50, 0.4);
+}
+
+/* Memory cell styling */
+.memory-cell {
+  @apply border border-gray-700 flex items-center justify-center text-xs font-mono transition-all duration-300;
+  background: linear-gradient(135deg, #1a1a20 0%, #252530 100%);
+}
+
+.memory-cell.highlighted {
+  @apply border-nvidia-green;
+  box-shadow: 0 0 10px rgba(118, 185, 0, 0.5), inset 0 0 10px rgba(118, 185, 0, 0.1);
+}
+
+.memory-cell.conflict {
+  @apply border-conflict-red;
+  box-shadow: 0 0 10px rgba(255, 50, 50, 0.5), inset 0 0 10px rgba(255, 50, 50, 0.1);
+  animation: pulse-conflict 0.5s ease-in-out infinite;
+}
+
+@keyframes pulse-conflict {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 50, 50, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(255, 50, 50, 0.8); }
+}
+
+/* Data flow path animations */
+.data-path {
+  stroke-dasharray: 10 5;
+  animation: dash-flow 1s linear infinite;
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -15;
+  }
+}
+
+/* Code syntax highlighting */
+.code-block {
+  @apply font-mono text-sm bg-bg-card rounded-lg p-4 border border-gray-800;
+}
+
+.code-keyword {
+  @apply text-cyber-purple;
+}
+
+.code-number {
+  @apply text-cyber-blue;
+}
+
+.code-operator {
+  @apply text-nvidia-green;
+}
+
+.code-comment {
+  @apply text-gray-500 italic;
+}
+
+.code-highlight {
+  @apply bg-nvidia-green-dim rounded px-1;
+  animation: code-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes code-pulse {
+  0%, 100% { background-color: rgba(118, 185, 0, 0.2); }
+  50% { background-color: rgba(118, 185, 0, 0.4); }
+}
+
+/* Toggle switch */
+.toggle-container {
+  @apply relative inline-flex items-center cursor-pointer;
+}
+
+.toggle-switch {
+  @apply w-14 h-7 bg-gray-700 rounded-full peer-checked:bg-nvidia-green transition-colors duration-300;
+}
+
+.toggle-knob {
+  @apply absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-300;
+}
+
+.toggle-container input:checked + .toggle-switch + .toggle-knob {
+  transform: translateX(28px);
+}
+
+/* Descriptor bit styling */
+.bit-field {
+  @apply font-mono text-xs px-1 py-0.5 rounded transition-all duration-200 cursor-pointer;
+}
+
+.bit-field:hover {
+  transform: scale(1.1);
+}
+
+/* Tensor Core pulse animation */
+.tensor-core {
+  animation: tensor-pulse 2s ease-in-out infinite;
+}
+
+@keyframes tensor-pulse {
+  0%, 100% {
+    box-shadow: 0 0 30px rgba(118, 185, 0, 0.3), 0 0 60px rgba(118, 185, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(118, 185, 0, 0.5), 0 0 100px rgba(118, 185, 0, 0.2);
+  }
+}
+
+/* Section styling */
+.section-container {
+  @apply min-h-screen flex flex-col items-center justify-center px-8 py-16 relative;
+}
+
+.section-title {
+  @apply text-4xl font-bold mb-4 font-mono;
+}
+
+.section-subtitle {
+  @apply text-lg text-gray-400 mb-8 max-w-2xl text-center;
+}
+
+/* HUD-style decorations */
+.hud-corner {
+  @apply absolute w-8 h-8 border-nvidia-green;
+}
+
+.hud-corner-tl {
+  @apply top-4 left-4 border-t-2 border-l-2;
+}
+
+.hud-corner-tr {
+  @apply top-4 right-4 border-t-2 border-r-2;
+}
+
+.hud-corner-bl {
+  @apply bottom-4 left-4 border-b-2 border-l-2;
+}
+
+.hud-corner-br {
+  @apply bottom-4 right-4 border-b-2 border-r-2;
+}
+
+/* Scan line effect */
+.scan-overlay {
+  @apply pointer-events-none absolute inset-0 overflow-hidden opacity-10;
+}
+
+.scan-line {
+  @apply absolute w-full h-px bg-nvidia-green;
+  animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+  0% { top: -2%; }
+  100% { top: 102%; }
+}
+
+/* Tooltip */
+.tooltip {
+  @apply absolute z-50 px-3 py-2 text-sm bg-bg-elevated border border-nvidia-green rounded-lg shadow-glow-green;
+  max-width: 250px;
+}
+
+.tooltip::before {
+  content: '';
+  @apply absolute w-2 h-2 bg-bg-elevated border-nvidia-green rotate-45;
+  border-width: 1px 0 0 1px;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
