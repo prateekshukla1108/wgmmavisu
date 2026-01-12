@@ -46,8 +46,8 @@ return (T*)(addr ^ swizzle);
 
     return (
         <div className="min-h-screen bg-bg-dark text-white overflow-x-hidden">
-            {/* Navigation Sidebar */}
-            <nav className="fixed left-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+            {/* Navigation Sidebar - hidden on mobile */}
+            <nav className="fixed left-4 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-3">
                 {sections.map((section, i) => (
                     <motion.button
                         key={section.id}

@@ -101,22 +101,24 @@ const BitVisualization = () => {
             </div>
 
             {/* Bit display */}
-            <div className="flex gap-0.5 flex-row-reverse">
-                {bits.map((bit, i) => (
-                    <motion.div
-                        key={i}
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: i * 0.05 }}
-                        className={`
+            <div className="overflow-x-auto">
+                <div className="flex gap-0.5 flex-row-reverse min-w-max">
+                    {bits.map((bit, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: i * 0.05 }}
+                            className={`
               w-6 h-8 flex flex-col items-center justify-center rounded text-xs font-mono
               ${getBitColor(i)} ${getBitGlow(i)}
             `}
-                    >
-                        <span className="text-white">{bit}</span>
-                        <span className="text-white/50 text-[8px]">{i}</span>
-                    </motion.div>
-                ))}
+                        >
+                            <span className="text-white">{bit}</span>
+                            <span className="text-white/50 text-[8px]">{i}</span>
+                        </motion.div>
+                    ))}
+                </div>
             </div>
 
             {/* Legend */}

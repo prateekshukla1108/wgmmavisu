@@ -69,8 +69,8 @@ const LdMatrix = ({ isAnimating = false }) => {
                 </span>
             </div>
 
-            {/* Main content - 3 columns */}
-            <div className="flex items-start gap-4 w-full">
+            {/* Main content - 3 columns, stacks on mobile */}
+            <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 w-full">
 
                 {/* Left: Compact 16x16 SMEM Grid */}
                 <div className="flex flex-col items-center">

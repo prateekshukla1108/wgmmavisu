@@ -41,8 +41,8 @@ const Stmatrix = ({ isAnimating = false }) => {
                 </div>
             </motion.div>
 
-            {/* Main visualization */}
-            <div className="flex items-center justify-center gap-6">
+            {/* Main visualization - stacks on mobile */}
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6">
                 {/* Registers (Source) */}
                 <div className="flex flex-col items-center gap-2">
                     <h4 className="text-sm font-mono text-gray-500 mb-2">Registers (D)</h4>

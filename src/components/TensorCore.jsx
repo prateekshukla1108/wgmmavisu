@@ -52,8 +52,8 @@ const TensorCore = ({ isAnimating = false }) => {
                     <button
                         onClick={() => setMode('rt_st')}
                         className={`px-4 py-2 rounded-lg font-mono text-sm transition-all ${mode === 'rt_st'
-                                ? 'bg-nvidia-green text-black font-semibold shadow-glow-green'
-                                : 'bg-bg-elevated text-gray-400 hover:bg-gray-700'
+                            ? 'bg-nvidia-green text-black font-semibold shadow-glow-green'
+                            : 'bg-bg-elevated text-gray-400 hover:bg-gray-700'
                             }`}
                     >
                         rt_st (A: Registers)
@@ -61,8 +61,8 @@ const TensorCore = ({ isAnimating = false }) => {
                     <button
                         onClick={() => setMode('st_st')}
                         className={`px-4 py-2 rounded-lg font-mono text-sm transition-all ${mode === 'st_st'
-                                ? 'bg-cyber-purple text-white font-semibold shadow-glow-purple'
-                                : 'bg-bg-elevated text-gray-400 hover:bg-gray-700'
+                            ? 'bg-cyber-purple text-white font-semibold shadow-glow-purple'
+                            : 'bg-bg-elevated text-gray-400 hover:bg-gray-700'
                             }`}
                     >
                         st_st (A: SMEM)
@@ -76,8 +76,8 @@ const TensorCore = ({ isAnimating = false }) => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`text-center p-3 rounded-lg border ${mode === 'rt_st'
-                        ? 'bg-nvidia-green/10 border-nvidia-green/30'
-                        : 'bg-cyber-purple/10 border-cyber-purple/30'
+                    ? 'bg-nvidia-green/10 border-nvidia-green/30'
+                    : 'bg-cyber-purple/10 border-cyber-purple/30'
                     }`}
             >
                 <div className={`font-mono font-semibold ${mode === 'rt_st' ? 'text-nvidia-green' : 'text-cyber-purple'}`}>
@@ -92,8 +92,8 @@ const TensorCore = ({ isAnimating = false }) => {
                 </div>
             </motion.div>
 
-            {/* Main visualization */}
-            <div className="flex items-center justify-center gap-4 py-8">
+            {/* Main visualization - stacks on mobile */}
+            <div className="flex flex-col lg:flex-row items-center justify-center gap-4 py-8 overflow-x-auto">
 
                 {/* Left Side: Source of Matrix A */}
                 <div className="flex flex-col items-center gap-2 w-32">

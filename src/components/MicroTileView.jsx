@@ -137,63 +137,79 @@ const MicroTileView = ({ microTile = { startRow: 0, startCol: 0 }, isSwizzled = 
                 </label>
             </div>
 
-            {/* Grid visualization */}
-            <div className="relative overflow-auto max-h-[400px] max-w-full">
-                {/* Column headers */}
-                <div className="flex ml-8 sticky top-0 bg-bg-dark z-10">
-                    {Array.from({ length: MICRO_COLS }, (_, i) => (
-                        <div
-                            key={i}
-                            className="w-6 h-5 flex items-center justify-center text-[7px] font-mono text-gray-500"
-                        >
-                            {microTile.startCol + i}
-                        </div>
-                    ))}
-                </div>
-
-                {/* Grid with row headers */}
-                <div className="flex">
-                    {/* Row headers */}
-                    <div className="flex flex-col sticky left-0 bg-bg-dark z-10">
-                        {Array.from({ length: MICRO_ROWS }, (_, i) => (
-                            <div
-                                key={i}
-                                className="w-8 h-4 flex items-center justify-end pr-1 text-[6px] font-mono text-gray-600"
-                            >
-                                {microTile.startRow + i}
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Grid cells */}
-                    <div
-                        className="grid gap-px bg-gray-800 p-px rounded"
-                        style={{ gridTemplateColumns: `repeat(${MICRO_COLS}, 24px)` }}
-                        onMouseLeave={() => setHoveredCell(null)}
-                    >
-                        {gridData.flat().map((cell) => {
-                            const bank = isSwizzled ? cell.swizzledBank : cell.linearBank;
-                            const isHovered = hoveredCell?.row === cell.row && hoveredCell?.col === cell.col;
-
-                            return (
+            {/* Grid visualization - scrollable container for space saving */}
+            <div className="relative max-w-full">
+                {/* Scroll container with fixed height */}
+                <div
+                    className="overflow-auto max-h-80 border border-gray-700 rounded-lg bg-bg-card"
+                    style={{
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#76b900 #1a1a2e',
+                    }}
+                >
+                    {/* Inner grid wrapper */}
+                    <div className="relative">
+                        {/* Column headers - sticky at top */}
+                        <div className="flex ml-8 sticky top-0 bg-bg-card z-20 border-b border-gray-700/50 py-1">
+                            {Array.from({ length: MICRO_COLS }, (_, i) => (
                                 <div
-                                    key={`${cell.row}-${cell.col}`}
-                                    className={`w-6 h-4 flex items-center justify-center text-[6px] font-mono font-bold cursor-pointer
-                                        ${isHovered ? 'ring-1 ring-white z-20' : ''}`}
-                                    style={{
-                                        backgroundColor: getBankColor(bank),
-                                        opacity: isHovered ? 1 : 0.85,
-                                    }}
-                                    onMouseEnter={() => setHoveredCell(cell)}
+                                    key={i}
+                                    className="w-5 h-4 flex items-center justify-center text-[7px] font-mono text-gray-500"
                                 >
-                                    <span className="text-white drop-shadow-sm">
-                                        {showAddresses ? (cell.linearAddr % 256).toString(16) : bank}
-                                    </span>
+                                    {microTile.startCol + i}
                                 </div>
-                            );
-                        })}
+                            ))}
+                        </div>
+
+                        {/* Grid with row headers */}
+                        <div className="flex">
+                            {/* Row headers - sticky at left */}
+                            <div className="flex flex-col sticky left-0 bg-bg-card z-10">
+                                {Array.from({ length: MICRO_ROWS }, (_, i) => (
+                                    <div
+                                        key={i}
+                                        className="w-8 h-3.5 flex items-center justify-end pr-1 text-[6px] font-mono text-gray-600"
+                                    >
+                                        {microTile.startRow + i}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Grid cells - smaller for compact view */}
+                            <div
+                                className="grid gap-px bg-gray-800 p-px rounded"
+                                style={{ gridTemplateColumns: `repeat(${MICRO_COLS}, 20px)` }}
+                                onMouseLeave={() => setHoveredCell(null)}
+                            >
+                                {gridData.flat().map((cell) => {
+                                    const bank = isSwizzled ? cell.swizzledBank : cell.linearBank;
+                                    const isHovered = hoveredCell?.row === cell.row && hoveredCell?.col === cell.col;
+
+                                    return (
+                                        <div
+                                            key={`${cell.row}-${cell.col}`}
+                                            className={`w-5 h-3.5 flex items-center justify-center text-[5px] font-mono font-bold cursor-pointer
+                                                ${isHovered ? 'ring-1 ring-white z-20' : ''}`}
+                                            style={{
+                                                backgroundColor: getBankColor(bank),
+                                                opacity: isHovered ? 1 : 0.85,
+                                            }}
+                                            onMouseEnter={() => setHoveredCell(cell)}
+                                        >
+                                            <span className="text-white drop-shadow-sm">
+                                                {showAddresses ? (cell.linearAddr % 256).toString(16) : bank}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                {/* Scroll hint */}
+                <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-bg-card to-transparent pointer-events-none rounded-b-lg" />
+                <div className="text-center mt-1 text-[9px] text-gray-600 font-mono">↕ Scroll to view all 64 rows</div>
             </div>
 
             {/* Hover tooltip */}

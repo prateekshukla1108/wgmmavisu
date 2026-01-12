@@ -120,9 +120,11 @@ const Descriptor = ({ isActive = false, onFieldHover }) => {
                 {/* Glowing container */}
                 <div className="absolute -inset-3 bg-gradient-to-r from-nvidia-green/20 via-cyber-blue/20 to-cyber-purple/20 rounded-lg blur-lg" />
 
-                {/* Bit strip */}
-                <div className="relative flex rounded overflow-hidden border border-nvidia-green/50">
-                    {renderBits()}
+                {/* Bit strip - scrollable on mobile */}
+                <div className="relative overflow-x-auto">
+                    <div className="flex rounded overflow-hidden border border-nvidia-green/50 min-w-max">
+                        {renderBits()}
+                    </div>
                 </div>
 
                 {/* Bit range labels */}

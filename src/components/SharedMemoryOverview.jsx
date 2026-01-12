@@ -62,7 +62,7 @@ const SharedMemoryOverview = ({ onSelectMicroTile }) => {
             </div>
 
             {/* Memory Layout Visualization */}
-            <div className="flex gap-8 items-start">
+            <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
                 {/* Matrix A */}
                 <div className="flex flex-col items-center">
                     <div className="text-sm font-mono text-nvidia-green mb-2">

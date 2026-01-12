@@ -166,7 +166,7 @@ body {
 
 /* Section styling */
 .section-container {
-  @apply min-h-screen flex flex-col items-center justify-center px-8 py-16 relative;
+  @apply min-h-screen flex flex-col items-center justify-center px-4 md:px-8 py-8 md:py-16 relative;
 }
 
 .section-title {
