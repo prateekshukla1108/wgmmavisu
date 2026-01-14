@@ -77,8 +77,15 @@ body {
 }
 
 @keyframes pulse-conflict {
-  0%, 100% { box-shadow: 0 0 10px rgba(255, 50, 50, 0.5); }
-  50% { box-shadow: 0 0 20px rgba(255, 50, 50, 0.8); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(255, 50, 50, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(255, 50, 50, 0.8);
+  }
 }
 
 /* Data flow path animations */
@@ -120,8 +127,15 @@ body {
 }
 
 @keyframes code-pulse {
-  0%, 100% { background-color: rgba(118, 185, 0, 0.2); }
-  50% { background-color: rgba(118, 185, 0, 0.4); }
+
+  0%,
+  100% {
+    background-color: rgba(118, 185, 0, 0.2);
+  }
+
+  50% {
+    background-color: rgba(118, 185, 0, 0.4);
+  }
 }
 
 /* Toggle switch */
@@ -137,7 +151,7 @@ body {
   @apply absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-300;
 }
 
-.toggle-container input:checked + .toggle-switch + .toggle-knob {
+.toggle-container input:checked+.toggle-switch+.toggle-knob {
   transform: translateX(28px);
 }
 
@@ -156,9 +170,12 @@ body {
 }
 
 @keyframes tensor-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 30px rgba(118, 185, 0, 0.3), 0 0 60px rgba(118, 185, 0, 0.1);
   }
+
   50% {
     box-shadow: 0 0 50px rgba(118, 185, 0, 0.5), 0 0 100px rgba(118, 185, 0, 0.2);
   }
@@ -174,7 +191,7 @@ body {
 }
 
 .section-subtitle {
-  @apply text-lg text-gray-400 mb-8 max-w-2xl text-center;
+  @apply text-lg text-gray-400 mb-8 max-w-2xl text-center mx-auto;
 }
 
 /* HUD-style decorations */
@@ -209,8 +226,13 @@ body {
 }
 
 @keyframes scan {
-  0% { top: -2%; }
-  100% { top: 102%; }
+  0% {
+    top: -2%;
+  }
+
+  100% {
+    top: 102%;
+  }
 }
 
 /* Tooltip */

@@ -149,26 +149,37 @@ const MicroTileView = ({ microTile = { startRow: 0, startCol: 0 }, isSwizzled = 
                 >
                     {/* Inner grid wrapper */}
                     <div className="relative">
-                        {/* Column headers - sticky at top */}
-                        <div className="flex ml-8 sticky top-0 bg-bg-card z-20 border-b border-gray-700/50 py-1">
-                            {Array.from({ length: MICRO_COLS }, (_, i) => (
-                                <div
-                                    key={i}
-                                    className="w-5 h-4 flex items-center justify-center text-[7px] font-mono text-gray-500"
-                                >
-                                    {microTile.startCol + i}
-                                </div>
-                            ))}
+                        {/* Column headers - sticky at top, using grid to match cell layout */}
+                        <div className="flex sticky top-0 bg-bg-card z-20 border-b border-gray-700/50 py-1">
+                            {/* Spacer for row header column */}
+                            <div className="w-8 flex-shrink-0" />
+                            {/* Column header grid - matches cell grid exactly */}
+                            <div
+                                className="grid gap-px p-px"
+                                style={{ gridTemplateColumns: `repeat(${MICRO_COLS}, 20px)` }}
+                            >
+                                {Array.from({ length: MICRO_COLS }, (_, i) => (
+                                    <div
+                                        key={i}
+                                        className="w-5 h-4 flex items-center justify-center text-[7px] font-mono text-gray-500"
+                                    >
+                                        {microTile.startCol + i}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
                         {/* Grid with row headers */}
                         <div className="flex">
-                            {/* Row headers - sticky at left */}
-                            <div className="flex flex-col sticky left-0 bg-bg-card z-10">
+                            {/* Row headers - sticky at left, using grid to match cell row gaps */}
+                            <div
+                                className="grid gap-px sticky left-0 bg-bg-card z-10 p-px"
+                                style={{ gridTemplateRows: `repeat(${MICRO_ROWS}, 14px)` }}
+                            >
                                 {Array.from({ length: MICRO_ROWS }, (_, i) => (
                                     <div
                                         key={i}
-                                        className="w-8 h-3.5 flex items-center justify-end pr-1 text-[6px] font-mono text-gray-600"
+                                        className="w-8 flex items-center justify-end pr-1 text-[6px] font-mono text-gray-600"
                                     >
                                         {microTile.startRow + i}
                                     </div>
