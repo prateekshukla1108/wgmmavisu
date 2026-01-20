@@ -8,20 +8,23 @@ const LdMatrix = ({ isAnimating = false }) => {
     const BASE_ADDR = 0x400;
 
     const calculateThreadAddress = (tid) => {
-        const group = Math.floor(tid / 8);
-        const laneInGroup = tid % 8;
-        const rowIndex = (group >= 2 ? 8 : 0) + laneInGroup;
+        // Threads 0-15: rows 0-15, cols 0-7
+        // Threads 16-31: rows 0-15, cols 8-15
+        const group = tid < 16 ? 0 : 1; // Only 2 groups: left half and right half
+        const rowIndex = tid % 16; // Each group covers all 16 rows
         const rowOffset = rowIndex * STRIDE;
-        const colOffset = (group % 2 === 1) ? 16 : 0;
+        const colOffset = group === 1 ? 16 : 0; // Group 1 starts at col 8 (16 bytes)
 
         return {
-            tid, group, laneInGroup, rowIndex,
-            colOffset: colOffset / 2,
+            tid, group,
+            laneInGroup: tid % 16,
+            rowIndex,
+            colOffset: colOffset / 2, // Column index (0 or 8)
             rowOffset,
             colOffsetBytes: colOffset,
             finalAddr: BASE_ADDR + rowOffset + colOffset,
             destReg: group,
-            subMatrixName: ['Top-Left', 'Top-Right', 'Bot-Left', 'Bot-Right'][group],
+            subMatrixName: group === 0 ? 'Left (cols 0-7)' : 'Right (cols 8-15)',
         };
     };
 
@@ -32,7 +35,7 @@ const LdMatrix = ({ isAnimating = false }) => {
     const selectedData = threadData[selectedThread];
 
     const groupColors = [
-        '#76b900', '#00c8ff', '#b464ff', '#ffb432',
+        '#76b900', '#00c8ff', // Green for left half, Blue for right half
     ];
 
     return (
@@ -106,11 +109,8 @@ const LdMatrix = ({ isAnimating = false }) => {
                                     const row = Math.floor(idx / 16);
                                     const col = idx % 16;
 
-                                    let cellGroup = -1;
-                                    if (row < 8 && col < 8) cellGroup = 0;
-                                    else if (row < 8 && col >= 8) cellGroup = 1;
-                                    else if (row >= 8 && col < 8) cellGroup = 2;
-                                    else cellGroup = 3;
+                                    // 2 groups: left half (cols 0-7) and right half (cols 8-15)
+                                    const cellGroup = col < 8 ? 0 : 1;
 
                                     const isSelectedRow = row === selectedData.rowIndex;
                                     const isSelectedCols = (selectedData.colOffset === 0 && col < 8) ||
@@ -135,10 +135,9 @@ const LdMatrix = ({ isAnimating = false }) => {
                     </div>
 
                     {/* Legend */}
-                    <div className="flex gap-2 mt-2 text-[8px] font-mono">
-                        {['A:TL', 'B:TR', 'C:BL', 'D:BR'].map((l, i) => (
-                            <span key={i} style={{ color: groupColors[i] }}>{l}</span>
-                        ))}
+                    <div className="flex gap-3 mt-2 text-[8px] font-mono">
+                        <span style={{ color: groupColors[0] }}>T0-15: cols 0-7</span>
+                        <span style={{ color: groupColors[1] }}>T16-31: cols 8-15</span>
                     </div>
                 </div>
 
@@ -193,7 +192,7 @@ const LdMatrix = ({ isAnimating = false }) => {
                 <div className="flex flex-col items-center">
                     <div className="text-xs text-gray-500 mb-1">Registers</div>
                     <div className="space-y-1">
-                        {[0, 1, 2, 3].map((reg) => (
+                        {[0, 1].map((reg) => (
                             <motion.div
                                 key={reg}
                                 className="flex items-center gap-2 px-2 py-1 rounded border text-xs font-mono"
@@ -204,7 +203,7 @@ const LdMatrix = ({ isAnimating = false }) => {
                             >
                                 <span style={{ color: groupColors[reg] }}>%r{reg}</span>
                                 <span className="text-gray-500 text-[10px]">
-                                    ← {['TL', 'TR', 'BL', 'BR'][reg]}
+                                    ← {['Left', 'Right'][reg]}
                                 </span>
                             </motion.div>
                         ))}
@@ -222,7 +221,7 @@ const LdMatrix = ({ isAnimating = false }) => {
             {/* Code */}
             <div className="text-[10px] font-mono text-gray-400 bg-bg-card p-2 rounded border border-gray-800 max-w-md">
                 <span className="text-gray-500">// Per-thread:</span>{' '}
-                row = (group≥2?8:0)+lane; col_off = (group%2)?16:0
+                row = tid%16; col_off = (tid≥16)?16:0
             </div>
         </div>
     );
