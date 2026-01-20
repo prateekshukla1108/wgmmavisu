@@ -8,23 +8,30 @@ const LdMatrix = ({ isAnimating = false }) => {
     const BASE_ADDR = 0x400;
 
     const calculateThreadAddress = (tid) => {
-        // Threads 0-15: rows 0-15, cols 0-7
-        // Threads 16-31: rows 0-15, cols 8-15
-        const group = tid < 16 ? 0 : 1; // Only 2 groups: left half and right half
-        const rowIndex = tid % 16; // Each group covers all 16 rows
+        // T0-7: top-left (rows 0-7, cols 0-7)
+        // T8-15: bottom-left (rows 8-15, cols 0-7)
+        // T16-23: top-right (rows 0-7, cols 8-15)
+        // T24-31: bottom-right (rows 8-15, cols 8-15)
+        const group = Math.floor(tid / 8); // 4 groups of 8 threads
+        const laneInGroup = tid % 8;
+
+        // Threads 0-15 = left cols, Threads 16-31 = right cols
+        const isRightHalf = tid >= 16;
+        // Within each half, first 8 threads = top rows, next 8 = bottom rows
+        const isBottomHalf = (tid >= 8 && tid < 16) || (tid >= 24);
+
+        const rowIndex = (isBottomHalf ? 8 : 0) + laneInGroup;
         const rowOffset = rowIndex * STRIDE;
-        const colOffset = group === 1 ? 16 : 0; // Group 1 starts at col 8 (16 bytes)
+        const colOffset = isRightHalf ? 16 : 0; // 16 bytes = 8 fp16 columns
 
         return {
-            tid, group,
-            laneInGroup: tid % 16,
-            rowIndex,
+            tid, group, laneInGroup, rowIndex,
             colOffset: colOffset / 2, // Column index (0 or 8)
             rowOffset,
             colOffsetBytes: colOffset,
             finalAddr: BASE_ADDR + rowOffset + colOffset,
             destReg: group,
-            subMatrixName: group === 0 ? 'Left (cols 0-7)' : 'Right (cols 8-15)',
+            subMatrixName: ['Top-Left', 'Bot-Left', 'Top-Right', 'Bot-Right'][group],
         };
     };
 
@@ -35,7 +42,7 @@ const LdMatrix = ({ isAnimating = false }) => {
     const selectedData = threadData[selectedThread];
 
     const groupColors = [
-        '#76b900', '#00c8ff', // Green for left half, Blue for right half
+        '#76b900', '#b464ff', '#00c8ff', '#ffb432', // TL, BL, TR, BR
     ];
 
     return (
@@ -109,8 +116,12 @@ const LdMatrix = ({ isAnimating = false }) => {
                                     const row = Math.floor(idx / 16);
                                     const col = idx % 16;
 
-                                    // 2 groups: left half (cols 0-7) and right half (cols 8-15)
-                                    const cellGroup = col < 8 ? 0 : 1;
+                                    // 4 quadrants: TL(0), BL(1), TR(2), BR(3)
+                                    let cellGroup;
+                                    if (row < 8 && col < 8) cellGroup = 0;      // Top-Left
+                                    else if (row >= 8 && col < 8) cellGroup = 1; // Bottom-Left
+                                    else if (row < 8 && col >= 8) cellGroup = 2; // Top-Right
+                                    else cellGroup = 3;                          // Bottom-Right
 
                                     const isSelectedRow = row === selectedData.rowIndex;
                                     const isSelectedCols = (selectedData.colOffset === 0 && col < 8) ||
@@ -135,9 +146,11 @@ const LdMatrix = ({ isAnimating = false }) => {
                     </div>
 
                     {/* Legend */}
-                    <div className="flex gap-3 mt-2 text-[8px] font-mono">
-                        <span style={{ color: groupColors[0] }}>T0-15: cols 0-7</span>
-                        <span style={{ color: groupColors[1] }}>T16-31: cols 8-15</span>
+                    <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 mt-2 text-[8px] font-mono">
+                        <span style={{ color: groupColors[0] }}>T0-7: TL</span>
+                        <span style={{ color: groupColors[2] }}>T16-23: TR</span>
+                        <span style={{ color: groupColors[1] }}>T8-15: BL</span>
+                        <span style={{ color: groupColors[3] }}>T24-31: BR</span>
                     </div>
                 </div>
 
