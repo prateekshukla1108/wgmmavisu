@@ -205,7 +205,7 @@ const LdMatrix = ({ isAnimating = false }) => {
                 <div className="flex flex-col items-center">
                     <div className="text-xs text-gray-500 mb-1">Registers</div>
                     <div className="space-y-1">
-                        {[0, 1].map((reg) => (
+                        {[0, 1, 2, 3].map((reg) => (
                             <motion.div
                                 key={reg}
                                 className="flex items-center gap-2 px-2 py-1 rounded border text-xs font-mono"
@@ -216,7 +216,7 @@ const LdMatrix = ({ isAnimating = false }) => {
                             >
                                 <span style={{ color: groupColors[reg] }}>%r{reg}</span>
                                 <span className="text-gray-500 text-[10px]">
-                                    ← {['Left', 'Right'][reg]}
+                                    ← {['TL', 'BL', 'TR', 'BR'][reg]}
                                 </span>
                             </motion.div>
                         ))}
@@ -234,7 +234,7 @@ const LdMatrix = ({ isAnimating = false }) => {
             {/* Code */}
             <div className="text-[10px] font-mono text-gray-400 bg-bg-card p-2 rounded border border-gray-800 max-w-md">
                 <span className="text-gray-500">// Per-thread:</span>{' '}
-                row = tid%16; col_off = (tid≥16)?16:0
+                row = ((tid%16)≥8?8:0)+(tid%8); col_off = (tid≥16)?16:0
             </div>
         </div>
     );
